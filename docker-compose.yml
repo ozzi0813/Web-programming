@@ -1,0 +1,32 @@
+services:
+  api:
+    build:
+      context: ./backend      # <--- Вказуємо, що код бекенду та package.json у папці backend/
+      dockerfile: Dockerfile
+    container_name: docuflow-api
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      PGHOST: "db"
+      PGPORT: "5432"
+      PGDATABASE: "docuflow"
+      PGUSER: "postgres"
+      PGPASSWORD: "examplepassword"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    container_name: docuflow-db
+    environment:
+      POSTGRES_DB: docuflow
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: examplepassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
