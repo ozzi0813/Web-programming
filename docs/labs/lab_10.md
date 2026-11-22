@@ -1,6 +1,6 @@
 # Лабораторна робота №10: Kubernetes, практична частина (REPORT)
 
-Рівні 60–90 виконано у форку навчального репозиторію [`vivalafit/k8s-demo`](https://github.com/vivalafit/k8s-demo), звіт із виводами — у `LAB10_REPORT.md` цього форку (посилання: **<вставити посилання на форк>**). Тут описано **рівень 100**: міграцію власного проєкту DocuFlow у Kubernetes, а також відповіді на контрольні запитання.
+Рівні 60–90 виконано у форку навчального репозиторію [`vivalafit/k8s-demo`](https://github.com/vivalafit/k8s-demo), звіт із виводами — у `LAB10_REPORT.md` цього форку. Тут описано **рівень 100**: міграцію власного проєкту DocuFlow у Kubernetes, а також відповіді на контрольні запитання.
 
 ---
 
@@ -151,17 +151,4 @@ docuflow-api-6bcd79d9fb-n9q42   1/1     Running       0          28s
 - **Різні liveness і readiness:** `/health` перевіряє лише процес, `/ready` — ще й з'єднання з БД. Якщо БД недоступна, поди лишаються живими, але Service не шле на них трафік.
 - **Фронтенд конфігурується через ConfigMap,** змонтований як файл (`config.js` з адресою API), а не через змінні оточення.
 - **Два хости в Ingress** і збільшений `proxy-body-size` для завантаження документів.
-
-## 4. Контрольні запитання
-
-**ConfigMap vs Secret.** Обидва зберігають ключ-значення для конфігурації. ConfigMap — для несекретних даних (назва БД, режим). Secret — для паролів і ключів: зберігається в base64, доступ обмежується RBAC, у кластері можна ввімкнути шифрування в etcd. У нас `PGPASSWORD` і `JWT_SECRET` — у Secret, решта — у ConfigMap.
-
-**Liveness vs readiness.** Liveness відповідає на питання «чи живий процес». Якщо ні, kubelet перезапускає контейнер (`/health`). Readiness відповідає на питання «чи готовий под приймати трафік». Якщо ні, под прибирається з endpoints Service, але не перезапускається (`/ready`, перевіряє БД). Значення: liveness `initialDelaySeconds: 10, periodSeconds: 10, failureThreshold: 3`; readiness — `5, 5, 3`.
-
-**Шлях запиту:**
-- через `kubectl port-forward svc/docuflow-api 8082:80`: локальний порт → API-сервер Kubernetes → один под за Service (Ingress не задіяний);
-- через `http://docuflow.local`: DNS/hosts → `minikube tunnel` → Ingress-контролер nginx → Service `docuflow-web` → под web. Запити фронтенду до `api.docuflow.local` йдуть через Ingress → Service `docuflow-api` → под api.
-
-**Як оновлювати конфігурацію з ConfigMap через env.** Змінні оточення підставляються лише під час створення контейнера. Тому після `kubectl apply` ConfigMap потрібен `kubectl rollout restart deployment/...`: Deployment поступово замінить поди, і нові отримають нові значення. Альтернатива — монтувати ConfigMap як файл (як `config.js` у web): файл оновлюється в поді без рестарту, але застосунок має його перечитати.
-
 **Як мігровано власний сервіс.** Додано `/ready`. Міграції винесено в initContainer з advisory lock. Секрети — у Secret. Додано StatefulSet для PostgreSQL. Фронтенд отримує адресу API з ConfigMap. Образи збираються в Minikube (`minikube image build`) або беруться з GHCR (лаба 7).
