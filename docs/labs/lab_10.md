@@ -152,3 +152,21 @@ docuflow-api-6bcd79d9fb-n9q42   1/1     Running       0          28s
 - **Фронтенд конфігурується через ConfigMap,** змонтований як файл (`config.js` з адресою API), а не через змінні оточення.
 - **Два хости в Ingress** і збільшений `proxy-body-size` для завантаження документів.
 **Як мігровано власний сервіс.** Додано `/ready`. Міграції винесено в initContainer з advisory lock. Секрети — у Secret. Додано StatefulSet для PostgreSQL. Фронтенд отримує адресу API з ConfigMap. Образи збираються в Minikube (`minikube image build`) або беруться з GHCR (лаба 7).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <img width="512" height="512" alt="sticker" src="https://github.com/user-attachments/assets/5f74d6a1-2692-4d66-a58b-0714ce540b02" />
+
