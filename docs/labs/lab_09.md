@@ -29,3 +29,5 @@
 Повний шлях запиту: **Client → DNS → Load Balancer → Ingress → Service → Pod**.
 
 Практична реалізація цієї схеми в Minikube — у [лабораторній №10](lab_10.md) і папці [`k8s/`](../../k8s).
+
+<img width="512" height="512" alt="sticker (2)" src="https://github.com/user-attachments/assets/ecaccfe2-7ed9-4361-bdd6-ba3a7631a4a3" />
