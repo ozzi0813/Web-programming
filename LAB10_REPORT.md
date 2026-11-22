@@ -117,3 +117,7 @@ ReplicaSet побачив, що реплік стало менше за `replica
 | Service не відповідає | `kubectl get endpoints k8s-demo-api -n k8s-demo` | чи є IP подів (якщо ні — readiness не пройшов або не збігся selector) |
 | Ingress 404/502 | `kubectl describe ingress k8s-demo-ingress -n k8s-demo`, `kubectl logs -n ingress-nginx deploy/ingress-nginx-controller` | host, backend service, помилки контролера |
 | Загальна картина | `kubectl get events -n k8s-demo --sort-by=.metadata.creationTimestamp` | що відбувалось у namespace |
+
+
+<img width="512" height="499" alt="sticker (1)" src="https://github.com/user-attachments/assets/2e783515-1d29-47a1-890f-4ce6fb90d073" />
+
